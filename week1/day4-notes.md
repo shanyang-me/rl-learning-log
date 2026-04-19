@@ -45,4 +45,4 @@ A special case where the Bayesian approach is tractable:
 | UCB | Action values | Optimistic bonus for under-explored actions |
 | Bayesian/Gittins | Posterior distributions | Optimal but intractable in general |
 
-Most simple, non-optimization methods (ε-greedy, UCB) work surprisingly well in practice. The theoretical optimum (Bayesian) is computationally intractable — the open question throughout RL is how to approximate it efficiently.
+On the 10-armed testbed, most methods perform comparably — no single method dominates universally. Simple methods like ε-greedy and UCB are competitive with more sophisticated approaches. The theoretical optimum (Bayesian) is computationally intractable — the open question throughout RL is how to approximate it efficiently.

@@ -80,8 +80,8 @@ v*(s) = max_a Σ_{s',r} p(s', r | s, a) · [r + γ·v*(s')]
 ```
 
 Two paths to the optimal policy:
-- **Iterate on v**: Compute v* → derive π* by picking the greedy action at each state
-- **Iterate on π**: Improve the policy directly until it converges to π*
+- **Value iteration**: Directly iterate on v using the Bellman optimality equation (apply max at each step) until v converges to v*, then derive π* by picking the greedy action at each state
+- **Policy iteration**: Alternate between evaluating v_π (solve Bellman equation for current policy) and improving π (make it greedy w.r.t. current v_π) until the policy stops changing
 
 Both are guaranteed to converge when γ < 1 (the Bellman optimality equation always has a unique solution).
 

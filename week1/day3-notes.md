@@ -39,7 +39,7 @@ Works well when reward distributions are fixed (stationary).
 ```
 Q_{t+1} = Q_t + α(R_t - Q_t)
 ```
-With constant step-size α, all steps get equal influence rather than diminishing weight. This lets the agent adapt to changing conditions.
+With constant step-size α, recent rewards get exponentially more influence — older rewards decay by (1-α)^n. This lets the agent adapt to changing conditions. (By contrast, the sample average with α = 1/n gives all past rewards equal weight.)
 
 ## Core Takeaway
 
