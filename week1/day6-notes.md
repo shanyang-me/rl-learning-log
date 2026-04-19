@@ -61,3 +61,48 @@ Each "backup" looks one step ahead: from s, consider all actions, then all possi
 ## Key Insight
 
 The Bellman equation turns the problem of computing value (an infinite sum of future rewards) into a system of simultaneous equations — one per state. If we can solve this system, we know the value of every state. That's exactly what dynamic programming does.
+
+## Optimal Value Functions and Optimal Policy
+
+**Optimal state-value function** — the best possible value achievable from any state:
+```
+v*(s) = max_π v_π(s)    for all s
+```
+
+**Optimal action-value function**:
+```
+q*(s, a) = max_π q_π(s, a)    for all s, a
+```
+
+**Bellman optimality equation** — replace the policy average (Σ_a π(a|s)) with a max:
+```
+v*(s) = max_a Σ_{s',r} p(s', r | s, a) · [r + γ·v*(s')]
+```
+
+Two paths to the optimal policy:
+- **Iterate on v**: Compute v* → derive π* by picking the greedy action at each state
+- **Iterate on π**: Improve the policy directly until it converges to π*
+
+Both are guaranteed to converge when γ < 1 (the Bellman optimality equation always has a unique solution).
+
+## Why It's Intractable in Practice
+
+The Bellman optimality equation is elegant but impractical for real problems:
+
+1. **State/action space too large** — Can't enumerate all states in a table (e.g., images as states → billions of possible states)
+2. **Memory impossible** — Tabular representation doesn't fit in memory
+3. **Environment unknown** — We don't have p(s', r | s, a) to plug into the equation
+4. **Computational cost** — Even if we had everything, iterating over all (s, a, s', r) combinations is exponential
+
+## Optimal Control vs RL: Clarified
+
+They solve the *same problem* (maximize cumulative reward in a sequential decision process) but under different assumptions:
+
+| | Optimal Control (DP) | Reinforcement Learning |
+|---|---|---|
+| **Environment model** | Known — has full p(s', r \| s, a) | Unknown — must learn from experience |
+| **Method** | Solve Bellman equation directly via computation | Approximate the solution through trial-and-error interaction |
+| **State space** | Small enough for tabular enumeration | Can be massive — needs function approximation |
+| **Key challenge** | Computational (solving the system) | Statistical (learning from limited samples) |
+
+RL is not "model-less" exactly — it's that RL *doesn't require* a model. Model-free RL learns directly from experience. Model-based RL learns a model from experience and then uses it for planning (combining both threads). The rest of the book is about practical methods that approximate the optimal solution under these real-world constraints.
