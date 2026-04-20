@@ -32,8 +32,17 @@ def get_next_state_and_reward(s, a):
     # YOUR CODE HERE
     # Reuse your GridWorld logic: boundary check, goal check, etc.
     # Return (next_state, reward)
-    raise NotImplementedError
-
+    (dr, dc) = ACTIONS[a]
+    new_row = s[0] + dr
+    new_col = s[1] + dc
+    reward = -1
+    if new_row < 0 or new_row >= SIZE or new_col < 0 or new_col >= SIZE:
+        # Hit boundary
+        reward = -10
+        new_row, new_col = s  # stay put
+    elif (new_row, new_col) == GOAL:
+        reward = 10
+    return (new_row, new_col), reward
 
 # ── Task 1: Policy Evaluation ────────────────────────────────
 def policy_evaluation(policy, theta=1e-6):
@@ -59,11 +68,20 @@ def policy_evaluation(policy, theta=1e-6):
         Until delta < theta
     """
     V = np.zeros((SIZE, SIZE))
-
-    # YOUR CODE HERE
-
-    raise NotImplementedError
-
+    while True:
+        delta = 0
+        for r in range(SIZE):
+            for c in range(SIZE):
+                s = (r, c)
+                if s == GOAL:
+                    continue  # V(GOAL) = 0 by definition
+                a_next = policy[s]
+                (s_next, reward) = get_next_state_and_reward(s, a_next)
+                v_old = V[s]
+                V[s] = reward + GAMMA * V[s_next]  # one-step lookahead
+                delta = max(delta, abs(V[s] - v_old))
+        if delta < theta:
+            break
     return V
 
 
@@ -89,10 +107,43 @@ def value_iteration(theta=1e-6):
         Extract policy: π(s) = argmax_a [r + γ·V(s')]
     """
     V = np.zeros((SIZE, SIZE))
-
-    # YOUR CODE HERE
-
-    raise NotImplementedError
+    policy = {}
+    while True:
+        delta = 0
+        for r in range(SIZE):
+            for c in range(SIZE):
+                s = (r, c)
+                if s == GOAL:
+                    continue  # V(GOAL) = 0 by definition
+                max_value = float('-inf')
+                best_action = None
+                for a in ACTIONS.keys():
+                    (s_next, reward) = get_next_state_and_reward(s, a)
+                    value = reward + GAMMA * V[s_next]
+                    if value > max_value:
+                        max_value = value
+                        best_action = a
+                v_old = V[s]
+                V[s] = max_value
+                delta = max(delta, abs(V[s] - v_old))
+        if delta < theta:
+            break
+    
+    for r in range(SIZE):
+        for c in range(SIZE):
+            s = (r, c)
+            if s == GOAL:
+                policy[s] = 0  # no action needed at goal
+                continue
+            best_action = None
+            max_value = float('-inf')
+            for a in ACTIONS.keys():
+                (s_next, reward) = get_next_state_and_reward(s, a)
+                value = reward + GAMMA * V[s_next]
+                if value > max_value:
+                    max_value = value
+                    best_action = a
+            policy[s] = best_action
 
     return V, policy
 
