@@ -47,7 +47,7 @@ No model needed for improvement.
 ## On-Policy vs Off-Policy
 
 **On-policy** (e.g., ε-greedy MC):
-- One policy does everything: it both explores and is the policy being evaluated/improved
+- The same policy is used for both generating experience (exploration) and being evaluated/improved
 - Uses ε-greedy: mostly exploit (1-ε), sometimes explore (ε)
 - Simple but limited — can only learn about the policy you're currently following
 - Converges to the best policy *among ε-soft policies* (not truly optimal since it always has ε exploration)
