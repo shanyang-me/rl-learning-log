@@ -40,6 +40,17 @@ G_t - V(S_t) = δ_t + γδ_{t+1} + γ²δ_{t+2} + ... + γ^{T-t-1}δ_{T-1}
 
 This shows that MC and TD are deeply connected — MC's single big correction at episode end is equivalent to the discounted sum of all the small TD corrections made step by step. TD just spreads the learning across every timestep rather than waiting until the end.
 
+## Optimality: TD vs MC
+
+Given a batch of experience, TD(0) and MC converge to different answers:
+
+- **TD(0)** converges to the **maximum likelihood estimate** of the Markov Reward Process — it implicitly builds the MLE model (transition probabilities and expected rewards) and computes the value function consistent with that model
+- **MC** converges to the values that minimize mean squared error on the *observed* returns
+
+The distinction: MC fits the training data better (lower error on seen episodes), but TD generalizes better to future experience because it exploits the Markov structure. MC treats each episode as an independent data point; TD recognizes that the same underlying MRP generated all episodes and leverages that.
+
+This is a bias-variance tradeoff at a deeper level: TD's inductive bias (assuming Markov structure) helps when the environment actually is Markov — which is the standard RL assumption.
+
 ## Why TD Matters
 
 - **Online learning**: Update after every step, don't wait for episode end
